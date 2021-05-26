@@ -8,6 +8,8 @@ Write code to determine his position and the direction that he is faced after re
 The position are represented like initial letter of cardinal orientation ('N', 'W', 'S', 'E')
 He always start at (0,0, 'N')
 
+King Poring forgot how to return to the begging, help him to find the fastest route to the begging (0, 0). You need to return the number of steps and a list of Command for his return! 
+
 
 Example
 String of command -> `"R", "L", "M", "R"` -> Output (0,1,'W') 
@@ -15,26 +17,14 @@ String of command -> `"R", "L", "M", "R"` -> Output (0,1,'W')
 */
 
 /*
-Always starts at (0,0, N)
-
-Only changes X,Y if after an 'M'
-'R' and 'L' only changes his faced position
-
-Need to check his faced position first
-if faced position is N or S change Y
-if faced position is W or E change X
-
-N change Y + 1
-S change Y -1
-W change X -1
-E change X +1
+Notes
 
 */
 
 function moveKingPoring(str) {
     let currentFacedPosition = 'N'
-    let initialXPosition = 0
-    let initialYPosition = 0
+    let XPosition = 0
+    let YPosition = 0
     let currentCommand = ''
 
     for (let i = 0; i < str.length; i++) {
@@ -42,10 +32,10 @@ function moveKingPoring(str) {
 
         if (currentCommand === 'M') {
             switch (currentFacedPosition) {
-                case 'N': initialYPosition++; break
-                case 'S': initialYPosition--; break
-                case 'W': initialXPosition--; break
-                default: initialXPosition++;
+                case 'N': YPosition++; break
+                case 'S': YPosition--; break
+                case 'W': XPosition--; break
+                default: XPosition++;
             }
             continue
         }
@@ -83,8 +73,39 @@ function moveKingPoring(str) {
         }
 
     }
-    console.log(currentFacedPosition, initialXPosition, initialYPosition)
+
+    function returnToTheBeginning() {
+        let numberOfMoviment = 0
+
+        if (
+            (currentFacedPosition === 'W' && XPosition < 0) ||
+            (currentFacedPosition === 'E' && XPosition > 0) ||
+            (currentFacedPosition === 'N' && YPosition > 0) ||
+            (currentFacedPosition === 'S' && YPosition < 0) 
+        ) {
+            return numberOfMoviment = 2 + Math.abs(YPosition) + Math.abs(XPosition)
+
+        } else if (
+            (currentFacedPosition === 'W' && (YPosition === 0 && XPosition > 0)) ||
+            (currentFacedPosition === 'E' && (YPosition === 0 && XPosition < 0)) ||
+            (currentFacedPosition === 'N' && (YPosition < 0 && XPosition === 0)) ||
+            (currentFacedPosition === 'S' && (YPosition > 0 && XPosition === 0))
+            
+        ){
+            return numberOfMoviment = Math.abs(YPosition) + Math.abs(XPosition)
+
+        } else {
+
+        } return numberOfMoviment = 1 + Math.abs(YPosition) + Math.abs(XPosition)
+    }
+
+    let turnAround = returnToTheBeginning()
+    // console.log(currentFacedPosition, XPosition, YPosition)
+    return (` Current position -> (${XPosition}, ${YPosition}, ${currentFacedPosition})
+        How to return to the begging -> ${turnAround}
+        `)
 }
-let strr = 'MLLMLMLM'
+
+let strr = 'MMMMLRMMMLMLMLRMLMRLRMLRMRMRLRMLRMLRRLMRL'
 
 console.log(moveKingPoring(strr))
